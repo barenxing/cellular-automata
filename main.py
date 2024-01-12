@@ -39,6 +39,8 @@ def main():
                 break
 
             if event.type == pygame.KEYUP:
+                if event.key == pygame.K_r:
+                    world.set_initial_cells(random_seed=True)
                 if event.key == pygame.K_HOME:
                     world.update_rule(number=0)
                 if event.key == pygame.K_END:
@@ -52,7 +54,9 @@ def main():
                     world.update_rule(step=-1)
                 elif event.key == pygame.K_DOWN or event.key == pygame.K_RIGHT:
                     world.update_rule(step=1)
-        
+
+        if world.redraw:
+            world.draw()
         pygame.display.update()
 
     pygame.quit()

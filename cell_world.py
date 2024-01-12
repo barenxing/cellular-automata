@@ -8,8 +8,9 @@ class CellWorld:
         self.window = window
         self.cell_width = cell_width
         self.steps = steps
-        self.set_initial_cells(random_seed)
+        self.redraw = True
         self.update_rule(number=rule)
+        self.set_initial_cells(random_seed)
 
 
     def update_ruleset(self):
@@ -26,7 +27,7 @@ class CellWorld:
 
         self.update_ruleset()
         pygame.display.set_caption(f"Cellular Automata - rule {self.rule}")
-        self.draw()
+        self.redraw = True
 
 
     def set_initial_cells(self, random_seed: bool=False):
@@ -37,6 +38,7 @@ class CellWorld:
                 self.initial_cells[i] = choice([0,0,0,0,0,1])
         else:
             self.initial_cells[w//2] = 1
+        self.redraw = True
     
     
     def draw(self):
@@ -47,6 +49,7 @@ class CellWorld:
             self.draw_at(i, cells)
             cells = self.cells_update(cells)
 
+        self.redraw = False
 
     def draw_at(self, row: int, cells):
         for i, value in enumerate(cells):
