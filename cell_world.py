@@ -4,12 +4,11 @@ import pygame
 from random import randint, choice
 
 class CellWorld:
-    def __init__(self, window: pygame.Surface, steps: int, cell_width: int, rule: int=0, random_seed:bool = False):
+    def __init__(self, window: pygame.Surface, steps: int, cell_width: int, rule_number: int=0, random_seed:bool = False):
         self.window = window
         self.cell_width = cell_width
         self.steps = steps
-        self.redraw = True
-        self.update_rule(number=rule)
+        self.update_rule_number(rule=rule_number)
         self.set_initial_cells(random_seed)
 
 
@@ -19,15 +18,15 @@ class CellWorld:
         self.ruleset = a.tolist()
     
 
-    def update_rule(self, step: int|None=None, number: int|None=None):
-        if step:
-            self.rule = (self.rule + step) % 256
-        elif type(number) == int:
-            self.rule = number % 256
+    def update_rule_number(self, increment: int|None=None, rule: int|None=None):
+        if increment:
+            self.rule = (self.rule + increment) % 256
+        elif type(rule) == int:
+            self.rule = rule % 256
 
         self.update_ruleset()
         pygame.display.set_caption(f"Cellular Automata - rule {self.rule}")
-        self.redraw = True
+        self.need_redraw = True
 
 
     def set_initial_cells(self, random_seed: bool=False):
@@ -38,7 +37,7 @@ class CellWorld:
                 self.initial_cells[i] = choice([0,0,0,0,0,1])
         else:
             self.initial_cells[w//2] = 1
-        self.redraw = True
+        self.need_redraw = True
     
     
     def draw(self):
@@ -49,7 +48,7 @@ class CellWorld:
             self.draw_at(i, cells)
             cells = self.cells_update(cells)
 
-        self.redraw = False
+        self.need_redraw = False
 
     def draw_at(self, row: int, cells):
         for i, value in enumerate(cells):
