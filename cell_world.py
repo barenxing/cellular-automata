@@ -1,5 +1,7 @@
+from bitarray import bitarray
+from bitarray.util import int2ba, ba2int
 import pygame
-from random import choice
+from random import randint, choice
 
 class CellWorld:
     def __init__(self, window: pygame.Surface, steps: int, cell_width: int, rule: int=0, random_seed:bool = False):
@@ -11,8 +13,10 @@ class CellWorld:
 
 
     def update_ruleset(self):
-        self.ruleset = list(map(lambda x: int(x), bin(self.rule)[2:].zfill(8)[::-1]))
-
+        a = int2ba(self.rule, endian='little')
+        a.fill()
+        self.ruleset = a.tolist()
+    
 
     def update_rule(self, step: int|None=None, number: int|None=None):
         if step:
@@ -26,10 +30,12 @@ class CellWorld:
 
 
     def set_initial_cells(self, random_seed: bool=False):
-        self.initial_cells = [0]*self.steps + [1] + [0]*self.steps
+        w = 2*self.steps+1
+        self.initial_cells = bitarray('0'*w)
         if random_seed:
-            for i in range(len(self.initial_cells)):
-                self.initial_cells[i] = choice([0, 1])
+            self.initial_cells[0:w:randint(4)] = 1
+        else:
+            self.initial_cells[w//2] = 1
     
     
     def draw(self):
@@ -41,7 +47,7 @@ class CellWorld:
             cells = self.cells_update(cells)
 
 
-    def draw_at(self, row: int, cells: list[int]):
+    def draw_at(self, row: int, cells):
         for i, value in enumerate(cells):
             color = ['gray85', 'black'][value]
             csz = self.cell_width
@@ -49,7 +55,7 @@ class CellWorld:
             pygame.draw.rect(self.window, 'gray60', (i*csz, row*csz, csz, csz), 1)
                                 
 
-    def cells_update(self, cells: list[int]) -> list[int]:
+    def cells_update(self, cells):
         c = len(cells)
         next_cells = [None]*c
 
@@ -61,6 +67,7 @@ class CellWorld:
         return next_cells
 
 
-    def next_generation(self, cells: list[str]) -> int:
-        index = int("".join(map(lambda x: f"{x}", cells)), base=2)
+    def next_generation(self, cells):
+        index = ba2int(bitarray(cells))
         return self.ruleset[index]
+
