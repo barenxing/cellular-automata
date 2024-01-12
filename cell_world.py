@@ -33,7 +33,8 @@ class CellWorld:
         w = 2*self.steps+1
         self.initial_cells = bitarray('0'*w)
         if random_seed:
-            self.initial_cells[0:w:randint(4)] = 1
+            for i in range(w):
+                self.initial_cells[i] = choice([0,0,0,0,0,1])
         else:
             self.initial_cells[w//2] = 1
     
