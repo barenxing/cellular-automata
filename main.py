@@ -1,12 +1,9 @@
-import sys
 from argparse import ArgumentParser, RawTextHelpFormatter
 import pygame
 from cell_world import CellWorld
 
 pygame.init()
 
-
- 
 def main():
     rule, steps, window_width = 0, 20, 800
     random_seed = False
@@ -21,7 +18,7 @@ def main():
     HOME changes rule number to 0
     END  changes rule number to 255
     """
-    
+
     parser = ArgumentParser(description=prog_desc, formatter_class=RawTextHelpFormatter)
     parser.add_argument('-s', '--steps', type=int, default=steps, help="number of steps(rows) to calculate, default: 20")
     parser.add_argument('-r', '--rule', type=int,  default=rule,  help="rule number as defined by Wolfram Alpha, integer 0-255, default: 0")
@@ -56,12 +53,12 @@ def main():
                 if event.key == pygame.K_HOME:
                     world.update_rule_number(rule=0)
                 if event.key == pygame.K_END:
-                    world.update_rule_number(rule=255)                
+                    world.update_rule_number(rule=255)
                 if event.key == pygame.K_PAGEUP:
                     world.update_rule_number(increment=-10)
                 if event.key == pygame.K_PAGEDOWN:
                     world.update_rule_number(increment=10)
-                                        
+
                 if event.key == pygame.K_LEFT or event.key == pygame.K_UP:
                     world.update_rule_number(increment=-1)
                 elif event.key == pygame.K_DOWN or event.key == pygame.K_RIGHT:
@@ -74,5 +71,5 @@ def main():
     pygame.quit()
 
 
-if __name__ == '__main__':    
+if __name__ == '__main__':
     main()
