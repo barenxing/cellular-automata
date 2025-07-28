@@ -1,6 +1,7 @@
 from argparse import ArgumentParser, RawTextHelpFormatter
+from random import choice
 import pygame
-from cell_world import CellWorld
+from wolfram_world import WolframWorld as CellWorld
 
 pygame.init()
 
@@ -37,8 +38,10 @@ def main():
     window = pygame.display.set_mode((width, height))
     clock = pygame.time.Clock()
 
-    world = CellWorld(window=window, steps=steps, cell_width=cell_width, rule_number=rule, random_seed=random_seed)
+    world = CellWorld(window=window, cell_width=cell_width, rows=steps+1, cols=2*steps+1, random_seed=random_seed)
+    world.update_rule_number(rule=rule)
 
+    
     run = True
     while run:
         clock.tick(60)
@@ -49,19 +52,19 @@ def main():
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_r:
-                    world.set_initial_cells(random_seed=True)
-                if event.key == pygame.K_HOME:
+                    world.update_rule_number(rule=choice(range(256)))
+                if event.key == pygame.K_HOME or event.key == pygame.K_a:
                     world.update_rule_number(rule=0)
-                if event.key == pygame.K_END:
+                if event.key == pygame.K_END or event.key == pygame.K_z:
                     world.update_rule_number(rule=255)
-                if event.key == pygame.K_PAGEUP:
+                if event.key == pygame.K_PAGEUP or event.key == pygame.K_p:
                     world.update_rule_number(increment=-10)
-                if event.key == pygame.K_PAGEDOWN:
+                if event.key == pygame.K_PAGEDOWN or event.key == pygame.K_n:
                     world.update_rule_number(increment=10)
 
-                if event.key == pygame.K_LEFT or event.key == pygame.K_UP:
+                if event.key == pygame.K_LEFT or event.key == pygame.K_UP or event.key == pygame.K_f:
                     world.update_rule_number(increment=-1)
-                elif event.key == pygame.K_DOWN or event.key == pygame.K_RIGHT:
+                elif event.key == pygame.K_DOWN or event.key == pygame.K_RIGHT or event.key == pygame.K_j:
                     world.update_rule_number(increment=1)
 
         if world.need_redraw:
