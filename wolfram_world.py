@@ -2,6 +2,8 @@
 # created by Richard Hu on 7/27/2025
 #
 # Wolfram World based on Bit Cell World.
+# Rewrite of this class using Bit Cell World as a base class is not strictly necessary,
+# but it allows for a more consistent interface with other cellular automata implementations.
 
 from bitarray import bitarray
 from random import choice
@@ -16,9 +18,9 @@ class WolframWorld(BitCellWorld):
   """
 
   def __init__(self, window, cell_width=20, rows=21, cols=41, random_seed=False):
-      super().__init__(window=window, cell_width=cell_width, rows=rows, cols=cols, random_seed=random_seed)
-      self.rule = 0  if not random_seed else choice(range(256))
-      self.ruleset = self.ruleset_for(self.rule)
+    super().__init__(window=window, cell_width=cell_width, rows=rows, cols=cols, random_seed=random_seed)
+    self.rule = 0
+    self.ruleset = self.ruleset_for(self.rule)
 
 
   def initialize_cells(self, random_seed: bool=False):

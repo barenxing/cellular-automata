@@ -38,8 +38,8 @@ def main():
     window = pygame.display.set_mode((width, height))
     clock = pygame.time.Clock()
 
-    world = CellWorld(window=window, cell_width=cell_width, rows=steps+1, cols=2*steps+1, random_seed=random_seed)
-    world.update_rule_number(rule=rule)
+    world = CellWorld(window=window, cell_width=cell_width, rows=steps+1, cols=2*steps+1)
+    world.update_rule_number(choice(range(256)) if random_seed else rule)
 
     
     run = True
